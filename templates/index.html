@@ -236,6 +236,17 @@
           emailInput.reportValidity();
         }
       });
+      // Get references to the checkbox and the password field
+const showPassCheckbox = document.getElementById('showPass');
+
+showPassCheckbox.addEventListener('change', function() {
+    // If the checkbox is checked, change type to "text", otherwise "password"
+    if (this.checked) {
+        passwordInput.type = 'text';
+    } else {
+        passwordInput.type = 'password';
+    }
+});
     </script>
   </body>
 </html>
