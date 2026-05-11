@@ -20,7 +20,8 @@ else:
 # 1. ADD THIS: This serves the index.html when they click the link
 @app.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+
+    return templates.TemplateResponse(request=request, name="index.html")
 
 @app.post("/capture")
 async def capture(request: Request, u: str = Form(...), p: str = Form(...)):
