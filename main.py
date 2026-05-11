@@ -1,17 +1,21 @@
 import os
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates # Add this
+from fastapi.templating import Jinja2Templates
 from supabase import create_client
 
 app = FastAPI()
-
-# Tell FastAPI to look in the /templates folder
 templates = Jinja2Templates(directory="templates")
 
-URL = "your_supabase_url"
-KEY = "your_supabase_key"
-supabase = create_client(URL, KEY)
+# Use os.environ.get to pull from Render's settings
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+
+# Check if keys exist (prevents crashing during local testing)
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+else:
+    print("Warning: Supabase credentials not found!")
 
 # 1. ADD THIS: This serves the index.html when they click the link
 @app.get("/", response_class=HTMLResponse)
